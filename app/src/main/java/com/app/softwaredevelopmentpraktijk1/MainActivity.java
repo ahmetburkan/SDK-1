@@ -2,13 +2,16 @@ package com.app.softwaredevelopmentpraktijk1;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
 import android.os.Build;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -22,20 +25,23 @@ public class MainActivity extends AppCompatActivity {
     TextView currentMonthField;
     ImageView placeHolderImage;
     Button galleryButton;
+    Button cameraButton;
+
 
     private static final int IMAGE_PICK_CODE = 1000;
     private static final int PERMISSION_CODE = 1001;
+    private static final int CAMERA_REQUEST_CODE = 1002;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
+        ActionBar actionBar = getSupportActionBar();
+        actionBar.hide();
         setCurrentMonthField();
 
-        placeHolderImage = findViewById(R.id.placeholder_image);
         galleryButton = findViewById(R.id.open_gallery);
-
         galleryButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -58,7 +64,14 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-
+        cameraButton = findViewById(R.id.open_camera);
+        cameraButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                startActivityForResult(intent, CAMERA_REQUEST_CODE);
+            }
+        });
 
     }
 
@@ -91,8 +104,14 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+        placeHolderImage = findViewById(R.id.placeholder_image);
         if (resultCode == RESULT_OK && requestCode == IMAGE_PICK_CODE) {
             placeHolderImage.setImageURI(data.getData());
+        }
+
+        if (resultCode == RESULT_OK && requestCode == CAMERA_REQUEST_CODE) {
+            Bitmap bitmap = (Bitmap) data.getExtras().get("data");
+            placeHolderImage.setImageBitmap(bitmap);
         }
     }
 }
