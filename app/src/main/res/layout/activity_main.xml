@@ -11,22 +11,35 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="20dp"
-        android:layout_marginBottom="10dp"
+        android:layout_marginBottom="28dp"
         android:text="Choose image"
-        android:textSize="10sp"
-        app:layout_constraintBottom_toTopOf="@+id/open_camera"
+        android:textSize="8sp"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
     <Button
         android:id="@+id/open_camera"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="20dp"
         android:layout_marginBottom="30dp"
         android:text="Take picture"
-        android:textSize="10sp"
+        android:textSize="8sp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintEnd_toStartOf="@+id/save_file_and_open_storage"
+        app:layout_constraintStart_toEndOf="@+id/open_gallery" />
+
+    <Button
+        android:id="@+id/save_file_and_open_storage"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="20dp"
+        android:layout_marginBottom="30dp"
+        android:background="#4CAF50"
+        android:backgroundTint="#4CAF50"
+        android:text="Use this picture"
+        android:textSize="8sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
 
     <TextView
         android:id="@+id/textView2"
@@ -53,8 +66,8 @@
         android:id="@+id/placeholder_image"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:layout_marginTop="10dp"
-        android:layout_marginBottom="10dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginBottom="20dp"
         android:background="#000000"
         android:backgroundTint="#000000"
         app:layout_constraintBottom_toTopOf="@+id/open_gallery"

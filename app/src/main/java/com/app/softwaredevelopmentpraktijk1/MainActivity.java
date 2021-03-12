@@ -12,6 +12,7 @@ import android.graphics.Bitmap;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -26,12 +27,11 @@ public class MainActivity extends AppCompatActivity {
     ImageView placeHolderImage;
     Button galleryButton;
     Button cameraButton;
-
+    Button nextButton;
 
     private static final int IMAGE_PICK_CODE = 1000;
     private static final int PERMISSION_CODE = 1001;
     private static final int CAMERA_REQUEST_CODE = 1002;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,6 +40,8 @@ public class MainActivity extends AppCompatActivity {
         ActionBar actionBar = getSupportActionBar();
         actionBar.hide();
         setCurrentMonthField();
+
+        placeHolderImage = findViewById(R.id.placeholder_image);
 
         galleryButton = findViewById(R.id.open_gallery);
         galleryButton.setOnClickListener(new View.OnClickListener() {
@@ -70,6 +72,26 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
                 startActivityForResult(intent, CAMERA_REQUEST_CODE);
+            }
+        });
+
+        nextButton = findViewById(R.id.save_file_and_open_storage);
+        nextButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(placeHolderImage.getDrawable() != null) {
+                    Toast.makeText(getApplicationContext(), "Saved current image", Toast.LENGTH_SHORT).show();
+
+//                    TODO: 1. Call class Storage and add the current image to the private files of the app.
+//                    TODO: 2. Redirect to new view. This view will show all images saved. Only accessible if clicked 'use this picture'.
+//                    TODO: 2.1 Possible to share image already without editing.
+//                    TODO: 3. Choose image of choice to edit.
+
+
+                }
+                else {
+                    Toast.makeText(getApplicationContext(), "No image selected", Toast.LENGTH_SHORT).show();
+                }
             }
         });
 
@@ -104,14 +126,16 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        placeHolderImage = findViewById(R.id.placeholder_image);
         if (resultCode == RESULT_OK && requestCode == IMAGE_PICK_CODE) {
             placeHolderImage.setImageURI(data.getData());
+            Toast.makeText(getApplicationContext(), "Image added", Toast.LENGTH_SHORT).show();
+
         }
 
         if (resultCode == RESULT_OK && requestCode == CAMERA_REQUEST_CODE) {
             Bitmap bitmap = (Bitmap) data.getExtras().get("data");
             placeHolderImage.setImageBitmap(bitmap);
+            Toast.makeText(getApplicationContext(), "Image added", Toast.LENGTH_SHORT).show();
         }
     }
 }
