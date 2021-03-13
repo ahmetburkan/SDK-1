@@ -5,6 +5,10 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.List;
+
 public class GalleryActivity extends AppCompatActivity {
 
     @Override
@@ -13,5 +17,8 @@ public class GalleryActivity extends AppCompatActivity {
         setContentView(R.layout.activity_gallery);
         ActionBar actionBar = getSupportActionBar();
         actionBar.hide();
+
+
     }
+
 }

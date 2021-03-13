@@ -12,9 +12,7 @@ import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Environment;
 import android.provider.MediaStore;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -23,13 +21,6 @@ import android.widget.Toast;
 
 import com.app.softwaredevelopmentpraktijk1.Model.DateModel;
 import com.app.softwaredevelopmentpraktijk1.Model.StorageModel;
-
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.OutputStream;
-import java.util.Random;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -88,26 +79,17 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void saveCurrentImage() {
-        StorageModel storageModel = new StorageModel();
-        File file = new File(storageModel.getStorageDirectory(), storageModel.getStorageFileName());
-
         BitmapDrawable drawable = (BitmapDrawable) placeHolderImage.getDrawable();
         Bitmap bitmap = drawable.getBitmap();
 
-        try {
-            FileOutputStream out = new FileOutputStream(file);
-            bitmap.compress(Bitmap.CompressFormat.JPEG, 90, out);
-            out.flush();
-            out.close();
-            Toast.makeText(getApplicationContext(), "Saved current image", Toast.LENGTH_SHORT).show();
+        StorageModel storageModel = new StorageModel();
+        storageModel.createFile(bitmap);
 
-            // Redirect to new view
-            Intent intent = new Intent(this, GalleryActivity.class);
-            startActivity(intent);
+        Toast.makeText(getApplicationContext(), "Saved current image", Toast.LENGTH_SHORT).show();
 
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        // Redirect to new view
+        Intent intent = new Intent(this, GalleryActivity.class);
+        startActivity(intent);
     }
 
     public void setCurrentMonthField() {
