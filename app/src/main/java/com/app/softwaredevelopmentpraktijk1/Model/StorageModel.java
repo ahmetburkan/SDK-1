@@ -3,45 +3,55 @@ package com.app.softwaredevelopmentpraktijk1.Model;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Environment;
+import android.util.Log;
 
 import java.io.File;
+import java.util.Date;
 
 public class StorageModel {
-    public static int IMAGE_COUNTER = 0;
     private static final String DIRECTORY_NAME = "SDFiles";
     private String FILE_NAME;
 
+    public File directory;
+
     public StorageModel() {
-        setStorageDirectory();
+        hasPermissionsToStorage();
     }
 
-    public void setStorageDirectory() {
-        File dir = new File(Environment.getExternalStorageDirectory(), DIRECTORY_NAME);
-        if(!dir.exists()){
-            dir.mkdirs();
-            dir.setExecutable(true);
-            dir.setReadable(true);
-            dir.setWritable(true);
+    private void hasPermissionsToStorage() {
+        if(Environment.MEDIA_MOUNTED.equals(Environment.getExternalStorageState())) {
+            Log.i("State","yes writeable");
+            setStorageDirectory();
+            setStorageFileName();
+        }
+        else {
+            Log.i("State","not writeable");
         }
     }
 
-    public String getStorageDirectory() {
-        return DIRECTORY_NAME;
+    private void setStorageDirectory() {
+        this.directory = new File(Environment.getExternalStorageDirectory(), DIRECTORY_NAME);
+
+        if(!directory.exists()){
+            directory.mkdirs();
+            directory.setExecutable(true);
+            directory.setReadable(true);
+            directory.setWritable(true);
+        }
     }
 
-    public void setStorageFileName() {
-        this.FILE_NAME = "Image-"+ IMAGE_COUNTER +".jpg";
-        ++IMAGE_COUNTER;
+    public File getStorageDirectory() {
+        return this.directory;
+    }
+
+    private void setStorageFileName() {
+        Date date = new Date();
+        long timeMilli = date.getTime();
+        this.FILE_NAME = "Image-"+ timeMilli +".jpg";
     }
 
     public String getStorageFileName() {
         return FILE_NAME;
-    }
-
-    public void createNewFile() {
-        BitmapDrawable drawable = (BitmapDrawable) placeHolderImage.getDrawable();
-        Bitmap bitmap = drawable.getBitmap();
-
     }
 
 }

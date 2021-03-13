@@ -22,6 +22,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.app.softwaredevelopmentpraktijk1.Model.DateModel;
+import com.app.softwaredevelopmentpraktijk1.Model.StorageModel;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -84,33 +85,14 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         });
-
     }
 
     public void saveCurrentImage() {
-        if(Environment.MEDIA_MOUNTED.equals(Environment.getExternalStorageState())) {
-            Log.i("State","yes writeable");
-        }
-        else {
-            Log.i("State","not writeable");
-        }
+        StorageModel storageModel = new StorageModel();
+        File file = new File(storageModel.getStorageDirectory(), storageModel.getStorageFileName());
 
         BitmapDrawable drawable = (BitmapDrawable) placeHolderImage.getDrawable();
         Bitmap bitmap = drawable.getBitmap();
-
-        File dir = new File(Environment.getExternalStorageDirectory(), "SDFiles");
-        if(!dir.exists()){
-            dir.mkdirs();
-            dir.setExecutable(true);
-            dir.setReadable(true);
-            dir.setWritable(true);
-        }
-
-        Random generator = new Random();
-        int n = 10000;
-        n = generator.nextInt(n);
-        String fname = "Image-"+ n +".jpg";
-        File file = new File (dir, fname);
 
         try {
             FileOutputStream out = new FileOutputStream(file);
@@ -119,15 +101,13 @@ public class MainActivity extends AppCompatActivity {
             out.close();
             Toast.makeText(getApplicationContext(), "Saved current image", Toast.LENGTH_SHORT).show();
 
+            // Redirect to new view
+            Intent intent = new Intent(this, GalleryActivity.class);
+            startActivity(intent);
+
         } catch (Exception e) {
             e.printStackTrace();
         }
-
-
-////                    TODO: 1. Call class Storage and add the current image to the external files of the app.
-////                    TODO: 2. Redirect to new view. This view will show all images saved. Only accessible if clicked 'use this picture'.
-////                    TODO: 2.1 Possible to share image already without editing.
-////                    TODO: 3. Choose image of choice to edit.
     }
 
     public void setCurrentMonthField() {
