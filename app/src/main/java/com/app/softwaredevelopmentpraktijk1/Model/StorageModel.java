@@ -14,10 +14,9 @@ import java.io.FileOutputStream;
 import java.util.Date;
 
 public class StorageModel {
-    private static final String DIRECTORY_NAME = "SDFiles";
+    public static final String DIRECTORY_NAME = "SDFiles";
+    private File directory;
     private String FILE_NAME;
-
-    public File directory;
 
     public StorageModel() {
         hasPermissionsToStorage();
