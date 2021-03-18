@@ -4,14 +4,18 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.FileProvider;
 
 import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
 import android.provider.MediaStore;
 import android.view.View;
 import android.widget.Button;
@@ -21,6 +25,11 @@ import android.widget.Toast;
 
 import com.app.softwaredevelopmentpraktijk1.Model.DateModel;
 import com.app.softwaredevelopmentpraktijk1.Model.StorageModel;
+
+import java.io.File;
+import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -34,6 +43,7 @@ public class MainActivity extends AppCompatActivity {
     private static final int STORAGE_REQUEST_CODE = 1001;
     private static final int CAMERA_REQUEST_CODE = 1002;
 
+    public String currentImagePath = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,8 +68,7 @@ public class MainActivity extends AppCompatActivity {
         cameraButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                startActivityForResult(intent, CAMERA_REQUEST_CODE);
+                captureImage();
             }
         });
 
@@ -149,14 +158,45 @@ public class MainActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == RESULT_OK && requestCode == IMAGE_PICK_CODE) {
-            placeHolderImage.setImageURI(data.getData());
+            currentImagePath = String.valueOf(data.getData());
+            placeHolderImage.setImageURI(Uri.parse(currentImagePath));
             Toast.makeText(getApplicationContext(), "Image added", Toast.LENGTH_SHORT).show();
         }
 
         if (resultCode == RESULT_OK && requestCode == CAMERA_REQUEST_CODE) {
-            Bitmap bitmap = (Bitmap) data.getExtras().get("data");
-            placeHolderImage.setImageBitmap(bitmap);
+            placeHolderImage.setImageURI(Uri.parse(currentImagePath));
             Toast.makeText(getApplicationContext(), "Image added", Toast.LENGTH_SHORT).show();
         }
+    }
+
+    private void captureImage() {
+        Intent cameraIntent =  new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+
+        if (cameraIntent.resolveActivity(getPackageManager()) != null) {
+            File imageFile = null;
+
+            try {
+                imageFile = getImageFile();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+            if(imageFile != null) {
+                Uri imageUri = FileProvider.getUriForFile(this, "com.app.softwaredevelopmentpraktijk1.fileprovider", imageFile);
+                cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, imageUri);
+                startActivityForResult(cameraIntent, CAMERA_REQUEST_CODE);
+            }
+        }
+    }
+
+    private File getImageFile() throws IOException {
+        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+        String imageName = "jpg_"+timeStamp+"_";
+        File storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
+
+        File imageFile = File.createTempFile(imageName, ".jpg", storageDir);
+        currentImagePath = imageFile.getAbsolutePath();
+
+        return imageFile;
     }
 }
