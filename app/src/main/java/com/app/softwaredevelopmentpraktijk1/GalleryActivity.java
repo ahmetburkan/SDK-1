@@ -15,10 +15,13 @@ import android.os.Environment;
 import android.os.Parcelable;
 import android.os.StrictMode;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
+import android.widget.ScrollView;
 
 import com.app.softwaredevelopmentpraktijk1.Model.StorageModel;
 
@@ -36,6 +39,15 @@ public class GalleryActivity extends AppCompatActivity {
         ActionBar actionBar = getSupportActionBar();
         actionBar.hide();
 
+        // inflate the main layout for the activity
+        setContentView(R.layout.activity_gallery);
+
+        // get a reference to the already created main layout
+        LinearLayout mainLayout = (LinearLayout) findViewById(R.id.linearlayout);
+
+        // inflate (create) another copy of our custom layout
+        LayoutInflater inflater = getLayoutInflater();
+
         // TODO: Frits
         StrictMode.VmPolicy.Builder builder = new StrictMode.VmPolicy.Builder();
         StrictMode.setVmPolicy(builder.build());
@@ -51,27 +63,24 @@ public class GalleryActivity extends AppCompatActivity {
             if (!file.isDirectory()) {
                 File imageFile = new File(folder, file.getName());
                 Uri imageUri =  Uri.fromFile(imageFile);
-                // TODO: Frits
+
+
+//                TODO: Frits
 //                Uri imageUri = FileProvider.getUriForFile(context, context.getApplicationContext().getPackageName() + ".fileprovider", imageFile);
 
-                // Create wrapper for ImageView
-                final LinearLayout linearLayoutWrapper = new LinearLayout(this);
-                LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, 300);
-                params.setMargins(30, 30, 30, 30);
-                linearLayoutWrapper.setLayoutParams(params);
-                linearLayoutWrapper.setOrientation(LinearLayout.HORIZONTAL);
-                linearLayoutWrapper.setBackgroundColor(0xFF00FF00);
 
-                // Create ImageView
-                final ImageView imageView = new ImageView(this);
+
+
+                View myLayout = inflater.inflate(R.layout.basic_gallery_layout, mainLayout, false);
+
+                // Override imageview
+                ImageView imageView = (ImageView) myLayout.findViewById(R.id.current_image);
                 String imagePath = Environment.getExternalStorageDirectory().getAbsolutePath()+"/"+StorageModel.DIRECTORY_NAME+"/"+ file.getName();
                 Bitmap bitmap = BitmapFactory.decodeFile(imagePath);
                 imageView.setImageBitmap(bitmap);
-                imageView.setMinimumHeight(300);
 
-
-                final Button shareButton = new Button(this);
-                shareButton.setText("Share");
+                // Override share button
+                Button shareButton = (Button) myLayout.findViewById(R.id.share_button);
                 shareButton.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -84,13 +93,16 @@ public class GalleryActivity extends AppCompatActivity {
                     }
                 });
 
-                // Add image to wrapper
-                linearLayoutWrapper.addView(imageView);
-                linearLayoutWrapper.addView(shareButton);
+                // Override edit button
+                Button editButton = (Button) myLayout.findViewById(R.id.edit_button);
+                editButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
 
-                // Add wrapper to scrollview
-                LinearLayout linearLayout = findViewById(R.id.scrollview);
-                linearLayout.addView(linearLayoutWrapper);
+                    }
+                });
+
+                mainLayout.addView(myLayout);
             }
         }
     }
