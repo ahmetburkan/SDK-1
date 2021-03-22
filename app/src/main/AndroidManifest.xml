@@ -17,7 +17,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.SoftwareDevelopmentPraktijk1">
-        <activity android:name=".ShareActivity"></activity>
+        <activity android:name=".ImageMergeActivity"></activity>
+        <activity android:name=".ImageSelectionActivity" />
         <activity android:name=".GalleryActivity" />
         <activity android:name=".MainActivity">
             <intent-filter>
@@ -26,7 +27,6 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
 
         <provider
             android:name="androidx.core.content.FileProvider"

@@ -48,6 +48,8 @@ public class GalleryActivity extends AppCompatActivity {
         // inflate (create) another copy of our custom layout
         LayoutInflater inflater = getLayoutInflater();
 
+        Intent ImageSelectionIntent = new Intent(this, ImageSelectionActivity.class);
+
         // TODO: Frits
         StrictMode.VmPolicy.Builder builder = new StrictMode.VmPolicy.Builder();
         StrictMode.setVmPolicy(builder.build());
@@ -98,7 +100,8 @@ public class GalleryActivity extends AppCompatActivity {
                 editButton.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-
+                        ImageSelectionIntent.putExtra("main_imagepath",imagePath);
+                        startActivity(ImageSelectionIntent);
                     }
                 });
 
