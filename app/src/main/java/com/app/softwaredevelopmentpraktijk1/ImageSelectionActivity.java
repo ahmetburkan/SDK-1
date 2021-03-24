@@ -10,7 +10,6 @@ import android.widget.ImageView;
 public class ImageSelectionActivity extends AppCompatActivity {
 
     ImageView greenHat;
-    String overlayImage = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,9 +25,8 @@ public class ImageSelectionActivity extends AppCompatActivity {
         greenHat.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                overlayImage = "green_hat";
                 ImageMergeIntent.putExtra("main_imagepath",mainImagePath);
-                ImageMergeIntent.putExtra("overlay_image",overlayImage);
+                ImageMergeIntent.putExtra("overlay_image", "green_hat");
                 startActivity(ImageMergeIntent);
             }
         });
