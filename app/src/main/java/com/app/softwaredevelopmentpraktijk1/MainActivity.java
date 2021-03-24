@@ -10,7 +10,6 @@ import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Build;
@@ -86,31 +85,10 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }
-
-    public void saveCurrentImage() {
-        BitmapDrawable drawable = (BitmapDrawable) placeHolderImage.getDrawable();
-        Bitmap bitmap = drawable.getBitmap();
-
-        StorageModel storageModel = new StorageModel();
-        storageModel.createFile(bitmap);
-
-        Toast.makeText(getApplicationContext(), "Saved current image", Toast.LENGTH_SHORT).show();
-
-        // Redirect to new view
-        Intent intent = new Intent(this, GalleryActivity.class);
-        startActivity(intent);
-    }
-
     public void setCurrentMonthField() {
         DateModel dateModel = new DateModel();
         currentMonthField = (TextView)findViewById(R.id.current_month_field);
         currentMonthField.setText(dateModel.getMonthString());
-    }
-
-    public void getImageFromGallery() {
-        Intent intent = new Intent(Intent.ACTION_PICK);
-        intent.setType("image/*");
-        startActivityForResult(intent, IMAGE_PICK_CODE);
     }
 
     public void getPermissionOfUser(String context) {
@@ -140,33 +118,10 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        switch (requestCode) {
-            case STORAGE_REQUEST_CODE:{
-                if(grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    Toast.makeText(this, "Permission granted to access storage", Toast.LENGTH_SHORT).show();
-                }
-                else {
-                    Toast.makeText(this, "Permission denied to access storage", Toast.LENGTH_SHORT).show();
-                }
-            }
-        }
-    }
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (resultCode == RESULT_OK && requestCode == IMAGE_PICK_CODE) {
-            currentImagePath = String.valueOf(data.getData());
-            placeHolderImage.setImageURI(Uri.parse(currentImagePath));
-            Toast.makeText(getApplicationContext(), "Image added", Toast.LENGTH_SHORT).show();
-        }
-
-        if (resultCode == RESULT_OK && requestCode == CAMERA_REQUEST_CODE) {
-            placeHolderImage.setImageURI(Uri.parse(currentImagePath));
-            Toast.makeText(getApplicationContext(), "Image added", Toast.LENGTH_SHORT).show();
-        }
+    public void getImageFromGallery() {
+        Intent intent = new Intent(Intent.ACTION_PICK);
+        intent.setType("image/*");
+        startActivityForResult(intent, IMAGE_PICK_CODE);
     }
 
     private void captureImage() {
@@ -198,5 +153,48 @@ public class MainActivity extends AppCompatActivity {
         currentImagePath = imageFile.getAbsolutePath();
 
         return imageFile;
+    }
+
+    public void saveCurrentImage() {
+        BitmapDrawable drawable = (BitmapDrawable) placeHolderImage.getDrawable();
+        Bitmap bitmap = drawable.getBitmap();
+
+        StorageModel storageModel = new StorageModel();
+        storageModel.createFile(bitmap);
+
+        Toast.makeText(getApplicationContext(), "Saved current image", Toast.LENGTH_SHORT).show();
+
+        // Redirect to new view
+        Intent intent = new Intent(this, GalleryActivity.class);
+        startActivity(intent);
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        switch (requestCode) {
+            case STORAGE_REQUEST_CODE:{
+                if(grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    Toast.makeText(this, "Permission granted to access storage", Toast.LENGTH_SHORT).show();
+                }
+                else {
+                    Toast.makeText(this, "Permission denied to access storage", Toast.LENGTH_SHORT).show();
+                }
+            }
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == RESULT_OK && requestCode == IMAGE_PICK_CODE) {
+            currentImagePath = String.valueOf(data.getData());
+            placeHolderImage.setImageURI(Uri.parse(currentImagePath));
+            Toast.makeText(getApplicationContext(), "Image added", Toast.LENGTH_SHORT).show();
+        }
+
+        if (resultCode == RESULT_OK && requestCode == CAMERA_REQUEST_CODE) {
+            placeHolderImage.setImageURI(Uri.parse(currentImagePath));
+            Toast.makeText(getApplicationContext(), "Image added", Toast.LENGTH_SHORT).show();
+        }
     }
 }

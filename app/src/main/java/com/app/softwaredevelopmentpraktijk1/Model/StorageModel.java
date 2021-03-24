@@ -1,13 +1,8 @@
 package com.app.softwaredevelopmentpraktijk1.Model;
 
-import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.drawable.BitmapDrawable;
 import android.os.Environment;
 import android.util.Log;
-import android.widget.Toast;
-
-import com.app.softwaredevelopmentpraktijk1.GalleryActivity;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -70,5 +65,12 @@ public class StorageModel {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    public File[] getDirectoryFiles() {
+        File folder = new File(String.valueOf(getStorageDirectory()));
+        File[] files = folder.listFiles();
+
+        return files;
     }
 }

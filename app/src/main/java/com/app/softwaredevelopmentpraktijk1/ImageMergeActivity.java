@@ -1,40 +1,74 @@
 package com.app.softwaredevelopmentpraktijk1;
 
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.content.ContextCompat;
 import androidx.core.content.res.ResourcesCompat;
 
-import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
-import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.Rect;
 import android.graphics.Typeface;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.util.Log;
+import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.Toast;
 
+import com.app.softwaredevelopmentpraktijk1.Model.DateModel;
 import com.app.softwaredevelopmentpraktijk1.Model.StorageModel;
 
 public class ImageMergeActivity extends AppCompatActivity {
 
     Drawable drawable;
+    Button goBack;
+    Button saveImage;
+    Bitmap mergedImages;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_image_merge);
+        ActionBar actionBar = getSupportActionBar();
+        actionBar.hide();
+
+        Intent goBackIntent = new Intent(this, GalleryActivity.class);
+        goBack = findViewById(R.id.go_back);
+        goBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(goBackIntent);
+            }
+        });
+
+        saveImage = findViewById(R.id.save_image);
+        saveImage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                StorageModel storageModel = new StorageModel();
+                storageModel.createFile(mergedImages);
+
+                Toast.makeText(getApplicationContext(), "Saved current image", Toast.LENGTH_SHORT).show();
+
+                // Redirect to new view
+                startActivity(goBackIntent);
+            }
+        });
+
+
+
         Bundle extras = getIntent().getExtras();
 
         String mainImagePath = extras.getString("main_imagepath");
         String overlayImage = extras.getString("overlay_image");
 
 
-        if(overlayImage.equals("green_hat")) {
+        if (overlayImage.equals("green_hat")) {
             this.drawable = ResourcesCompat.getDrawable(this.getResources(), R.drawable.green_hat, null);
         }
 
@@ -44,9 +78,9 @@ public class ImageMergeActivity extends AppCompatActivity {
         Bitmap bitmapOverlay = drawableToBitmap(this.drawable);
         Bitmap scaledbitmapOverlay = Bitmap.createScaledBitmap(bitmapOverlay, 400, 400, true);
 
-        Bitmap MergedImages = Bitmap.createBitmap(bitmapMain.getWidth(), bitmapMain.getHeight(),  bitmapMain.getConfig());
+        this.mergedImages = Bitmap.createBitmap(bitmapMain.getWidth(), bitmapMain.getHeight(),  bitmapMain.getConfig());
 
-        Canvas canvas = new Canvas(MergedImages);
+        Canvas canvas = new Canvas(this.mergedImages);
 
         canvas.drawBitmap(bitmapMain, 0, 0, null);
         canvas.drawBitmap(scaledbitmapOverlay,
@@ -62,24 +96,21 @@ public class ImageMergeActivity extends AppCompatActivity {
         int text_width = 0;
 
         paint.setTypeface(Typeface.DEFAULT);
-        paint.setTextSize(35);
+        paint.setTextSize(60);
 
-        String text = "Some random text";
+        String text = new DateModel().getMonthString();
 
         paint.getTextBounds(text, 0, text.length(), bounds);
-
+        paint.setColor(Color.WHITE);
         text_height =  bounds.height();
         text_width =  bounds.width();
 
-        canvas.drawText("Enter Amount",
+        canvas.drawText(text,
                 (bitmapMain.getWidth() - text_width) / 2,
-                text_height,
+                text_height * 2,
                 paint);
 
-        image.setImageBitmap(MergedImages);
-
-        StorageModel storageModel = new StorageModel();
-        storageModel.createFile(MergedImages);
+        image.setImageBitmap(this.mergedImages);
     }
 
     public static Bitmap drawableToBitmap (Drawable drawable) {

@@ -1,5 +1,6 @@
 package com.app.softwaredevelopmentpraktijk1;
 
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
@@ -15,6 +16,8 @@ public class ImageSelectionActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_image_selection);
+        ActionBar actionBar = getSupportActionBar();
+        actionBar.hide();
 
         Intent ImageMergeIntent = new Intent(this, ImageMergeActivity.class);
 
