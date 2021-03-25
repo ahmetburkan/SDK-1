@@ -17,8 +17,11 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -35,6 +38,7 @@ public class MainActivity extends AppCompatActivity {
 
     TextView currentMonthField;
     ImageView placeHolderImage;
+    ImageView placeHolderImageOverlay;
     Button galleryButton;
     Button cameraButton;
     Button nextButton;

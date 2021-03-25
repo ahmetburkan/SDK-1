@@ -62,17 +62,42 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView2" />
 
-    <ImageView
-        android:id="@+id/placeholder_image"
+    <FrameLayout
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_marginTop="20dp"
         android:layout_marginBottom="20dp"
-        android:background="#000000"
-        android:backgroundTint="#000000"
         app:layout_constraintBottom_toTopOf="@+id/open_gallery"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/current_month_field" />
+        app:layout_constraintTop_toBottomOf="@+id/current_month_field">
+
+        <ImageView
+            android:id="@+id/placeholder_image"
+            android:background="#000000"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"/>
+
+        <ImageView
+            android:id="@+id/placeholder_image_overlay"
+            android:layout_gravity="center"
+            android:layout_width="150dp"
+            android:layout_height="150dp"
+            android:layout_marginTop="30dp"
+            app:srcCompat="@drawable/ic_smile" />
+    </FrameLayout>
+
+<!--        <ImageView-->
+<!--        android:id="@+id/placeholder_image"-->
+<!--        android:layout_width="0dp"-->
+<!--        android:layout_height="0dp"-->
+<!--        android:layout_marginTop="20dp"-->
+<!--        android:layout_marginBottom="20dp"-->
+<!--        android:background="#000000"-->
+<!--        android:backgroundTint="#000000"-->
+<!--        app:layout_constraintBottom_toTopOf="@+id/open_gallery"-->
+<!--        app:layout_constraintEnd_toEndOf="parent"-->
+<!--        app:layout_constraintStart_toStartOf="parent"-->
+<!--        app:layout_constraintTop_toBottomOf="@+id/current_month_field" />-->
 
 </androidx.constraintlayout.widget.ConstraintLayout>
