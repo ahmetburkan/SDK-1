@@ -11,12 +11,11 @@ import java.util.Date;
 public class StorageModel {
     public static final String DIRECTORY_NAME = "SDFiles";
     private File directory;
-    private String FILE_NAME;
+    private String fileName;
 
     public StorageModel() {
         hasPermissionsToStorage();
         setStorageDirectory();
-        setStorageFileName();
     }
 
     private void hasPermissionsToStorage() {
@@ -46,14 +45,15 @@ public class StorageModel {
     private void setStorageFileName() {
         Date date = new Date();
         long timeMilli = date.getTime();
-        this.FILE_NAME = "Image-"+ timeMilli +".jpg";
+        this.fileName = "Image-"+ timeMilli +".jpg";
     }
 
     public String getStorageFileName() {
-        return FILE_NAME;
+        return fileName;
     }
 
     public void createFile(Bitmap bitmap) {
+        setStorageFileName();
         File file = new File(getStorageDirectory(), getStorageFileName());
 
         try {

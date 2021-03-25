@@ -23,6 +23,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.app.softwaredevelopmentpraktijk1.Model.DateModel;
+import com.app.softwaredevelopmentpraktijk1.Model.DrawableToBitmap;
 import com.app.softwaredevelopmentpraktijk1.Model.StorageModel;
 
 import java.io.File;
@@ -67,7 +68,7 @@ public class MainActivity extends AppCompatActivity {
         cameraButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                captureImage();
+                captureCameraImage();
             }
         });
 
@@ -124,14 +125,14 @@ public class MainActivity extends AppCompatActivity {
         startActivityForResult(intent, IMAGE_PICK_CODE);
     }
 
-    private void captureImage() {
+    private void captureCameraImage() {
         Intent cameraIntent =  new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
 
         if (cameraIntent.resolveActivity(getPackageManager()) != null) {
             File imageFile = null;
 
             try {
-                imageFile = getImageFile();
+                imageFile = getCameraImageFile();
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -144,7 +145,7 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    private File getImageFile() throws IOException {
+    private File getCameraImageFile() throws IOException {
         String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
         String imageName = "jpg_"+timeStamp+"_";
         File storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
@@ -157,7 +158,8 @@ public class MainActivity extends AppCompatActivity {
 
     public void saveCurrentImage() {
         BitmapDrawable drawable = (BitmapDrawable) placeHolderImage.getDrawable();
-        Bitmap bitmap = drawable.getBitmap();
+        DrawableToBitmap drawableToBitmap = new DrawableToBitmap();
+        Bitmap bitmap = drawableToBitmap.createDrawableToBitmap(drawable);
 
         StorageModel storageModel = new StorageModel();
         storageModel.createFile(bitmap);
@@ -171,14 +173,11 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        switch (requestCode) {
-            case STORAGE_REQUEST_CODE:{
-                if(grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    Toast.makeText(this, "Permission granted to access storage", Toast.LENGTH_SHORT).show();
-                }
-                else {
-                    Toast.makeText(this, "Permission denied to access storage", Toast.LENGTH_SHORT).show();
-                }
+        if (requestCode == STORAGE_REQUEST_CODE) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                Toast.makeText(this, "Permission granted to access storage", Toast.LENGTH_SHORT).show();
+            } else {
+                Toast.makeText(this, "Permission denied to access storage", Toast.LENGTH_SHORT).show();
             }
         }
     }
@@ -186,6 +185,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+
         if (resultCode == RESULT_OK && requestCode == IMAGE_PICK_CODE) {
             currentImagePath = String.valueOf(data.getData());
             placeHolderImage.setImageURI(Uri.parse(currentImagePath));

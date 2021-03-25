@@ -7,12 +7,70 @@
     tools:context=".ImageSelectionActivity">
 
     <ImageView
-        android:id="@+id/green_hat"
-        android:layout_width="217dp"
-        android:layout_height="235dp"
+        android:id="@+id/black_hat"
+        android:layout_width="150dp"
+        android:layout_height="150dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="20dp"
         android:background="#DFDFDF"
-        app:srcCompat="@drawable/green_hat"
-        tools:ignore="MissingConstraints"
-        tools:layout_editor_absoluteX="0dp"
-        tools:layout_editor_absoluteY="0dp" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/black_hat" />
+
+    <ImageView
+        android:id="@+id/bunny_ears"
+        android:layout_width="150dp"
+        android:layout_height="150dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginEnd="20dp"
+        android:background="#DFDFDF"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/bunny_ears" />
+
+    <ImageView
+        android:id="@+id/cowboy_hat"
+        android:layout_width="150dp"
+        android:layout_height="150dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="20dp"
+        android:background="#DFDFDF"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/black_hat"
+        app:srcCompat="@drawable/cowboy_hat" />
+
+    <ImageView
+        android:id="@+id/green_hat"
+        android:layout_width="150dp"
+        android:layout_height="150dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginEnd="20dp"
+        android:background="#DFDFDF"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/bunny_ears"
+        app:srcCompat="@drawable/green_hat" />
+
+    <ImageView
+        android:id="@+id/viking_helmet"
+        android:layout_width="150dp"
+        android:layout_height="150dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="20dp"
+        android:background="#DFDFDF"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/cowboy_hat"
+        app:srcCompat="@drawable/viking_helmet" />
+
+    <ImageView
+        android:id="@+id/wizard_hat"
+        android:layout_width="150dp"
+        android:layout_height="150dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginEnd="20dp"
+        android:background="#DFDFDF"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/green_hat"
+        app:srcCompat="@drawable/wizard_hat" />
+
+
 </androidx.constraintlayout.widget.ConstraintLayout>
