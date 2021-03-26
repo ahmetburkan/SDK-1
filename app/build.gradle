@@ -3,6 +3,14 @@ plugins {
 }
 
 android {
+    signingConfigs {
+        release {
+            storeFile file('/var/www/android/SoftwareDevelopmentPraktijk1/app/release/app-release.apk')
+            storePassword 'asdfg1'
+            keyPassword 'asdfg1'
+            keyAlias 'AppKeyStore.jks'
+        }
+    }
     compileSdkVersion 29
 
     defaultConfig {
